@@ -1,10 +1,46 @@
 import React from "react";
-
+import { Row, Col, Form, Button, Container, NavLink } from "react-bootstrap";
+import { RegisterBg } from "../../assets";
+import { useHistory } from "react-router-dom";
 const Login = () => {
+  const history = useHistory();
   return (
-    <div>
-      <p>Halaman Login</p>
-    </div>
+    <Row className="auth">
+      <Col md={8}>
+        <img src={RegisterBg} className="bg-image" />
+      </Col>
+      <Col md={4}>
+        <Container>
+          <Form>
+            <h3 className="mt-5">Login</h3>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control type="email" placeholder="Enter email" />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" placeholder="Password" />
+            </Form.Group>
+            <div className="d-grid gap-2">
+              <Button
+                variant="primary"
+                type="submit"
+                size="md"
+                onClick={() => history.push("/")}
+              >
+                Login
+              </Button>
+            </div>
+          </Form>
+          <p className="text-center mt-2">
+            Belum punya akun?
+            <NavLink onClick={() => history.push("/register")}>
+              Register
+            </NavLink>
+          </p>
+        </Container>
+      </Col>
+    </Row>
   );
 };
 
