@@ -1,3 +1,4 @@
 import Router from "./Routes";
+import store from"./redux/store";
 
-export { Router };
+export { Router, store };
