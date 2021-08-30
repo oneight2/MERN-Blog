@@ -1,42 +1,26 @@
 import { Button, Col, Container, Row } from "react-bootstrap";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { BlogItem } from "../../components";
 import { useHistory } from "react-router";
 import axios from "axios";
 import { Next } from "react-bootstrap/esm/PageItem";
 import { useSelector, useDispatch } from "react-redux";
+import { setDataBlog } from "../../config/redux/action";
 
 const Home = () => {
-  // pemanggilan state lokal bukan dari redux
-  // const [dataBlog, setDataBlog] = useState([]);
-  // inisialisasi state global dari redux
-  const { dataBlogs, name } = useSelector((state) => state);
-  console.log("Data Blogs", dataBlogs);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    // memanggil action redux dengan dispatch
-    setTimeout(() => {
-      dispatch({ type: "UPDATE_NAME" });
-    }, 3000);
-
-    axios
-      .get("http://localhost:4000/v1/blog/posts?page=1&perPage=2")
-      .then((result) => {
-        console.log("result", result.data);
-        const responAPI = result.data;
-
-        // setDataBlog(responAPI.data) [pemanggilan state lokal];
-        dispatch({ type: "UPDATE_DATA_BLOG", payload: responAPI.data });
-      })
-      .catch((err) => {
-        Next(err);
-      });
-  }, [dispatch]);
   const history = useHistory();
+  // inisialisasi state global dari redux
+  const { dataBlog } = useSelector((state) => state.homeReducer);
+  console.log("Data Blogs", dataBlog);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setDataBlog());
+  }, [dispatch]);
+
   return (
     <Container className="p-4">
-      <p>{name}</p>
+      {/* <p>{name}</p> */}
       <Button
         variant="primary"
         onClick={() => history.push("/create-blog")}
@@ -45,7 +29,7 @@ const Home = () => {
         Create Blog
       </Button>
       <Row className="mt-3 justify-content-md-center">
-        {dataBlogs.map((blog) => {
+        {dataBlog.map((blog) => {
           return (
             <BlogItem
               key={blog._id}

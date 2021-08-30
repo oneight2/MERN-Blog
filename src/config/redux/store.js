@@ -1,28 +1,7 @@
-import { createStore } from "redux";
+import { applyMiddleware, createStore } from "redux";
+import thunk from "redux-thunk";
+import reducer from "./reducer/reducer";
 
-const initialState = {
-  dataBlogs: [],
-  name: "syarif",
-};
-
-const reducer = (state = initialState, action) => {
-  if (action.type === "UPDATE_DATA_BLOG") {
-    return {
-      // copy state dulunya dengan cara spredd opertaor ...
-      ...state,
-      // apa yang mau diubah
-      dataBlogs: action.payload,
-    };
-  }
-  if (action.type === "UPDATE_NAME") {
-    return {
-      ...state,
-      name: "hidayat",
-    };
-  }
-  return state;
-};
-
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(thunk));
 
 export default store;
