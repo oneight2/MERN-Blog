@@ -1,9 +1,10 @@
 import axios from "axios";
 
-export const setDataBlog = () => (dispatch) => {
+export const setDataBlog = (page) => (dispatch) => {
+  console.log(page)
   axios
-    .get("http://localhost:4000/v1/blog/posts?page=1&perPage=2")
-    .then((result) => {
+    .get(`http://localhost:4000/v1/blog/posts?page=${page}&perPage=2`)
+    .then(result => {
       const responAPI = result.data;
       dispatch({ type: "UPDATE_DATA_BLOG", payload: responAPI.data });
     })

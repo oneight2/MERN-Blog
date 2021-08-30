@@ -1,22 +1,33 @@
 import { Button, Col, Container, Row } from "react-bootstrap";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BlogItem } from "../../components";
 import { useHistory } from "react-router";
-import axios from "axios";
-import { Next } from "react-bootstrap/esm/PageItem";
 import { useSelector, useDispatch } from "react-redux";
 import { setDataBlog } from "../../config/redux/action";
 
 const Home = () => {
   const history = useHistory();
+  // statelokal membuat pagination menghiung halaman diberi nilai default 1
+  const [counter, setCounter] = useState(1);
   // inisialisasi state global dari redux
   const { dataBlog } = useSelector((state) => state.homeReducer);
-  console.log("Data Blogs", dataBlog);
   const dispatch = useDispatch();
 
+  console.log(counter);
+  
   useEffect(() => {
-    dispatch(setDataBlog());
+    dispatch(setDataBlog(counter));
   }, [dispatch]);
+
+
+  const previous = () => {
+    setCounter(counter - 1);
+    // console.log(counter);
+  };
+  const next = () => {
+    setCounter(counter + 1);
+    // console.log(counter);
+  };
 
   return (
     <Container className="p-4">
@@ -45,14 +56,17 @@ const Home = () => {
       <Row className="mt-4">
         <Col>
           <div className="d-flex justify-content-center">
-            <Button variant="primary" type="submit" size="md">
+            <Button variant="primary" size="md" onClick={previous}>
               Previous
             </Button>
           </div>
         </Col>
         <Col>
+          <p className="text-center">1 / 3</p>
+        </Col>
+        <Col>
           <div className="d-flex justify-content-center">
-            <Button variant="primary" type="submit" size="md">
+            <Button variant="primary" size="md" onClick={next}>
               Next
             </Button>
           </div>

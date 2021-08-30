@@ -1,5 +1,3 @@
-import homeReducer from "./homeReducer";
-
 const initialState = {
   dataBlogs: [],
   name: "syarif",
@@ -15,4 +13,4 @@ const globalReducer = (state = initialState, action) => {
   return state;
 };
 
-export default homeReducer;
+export default globalReducer;
