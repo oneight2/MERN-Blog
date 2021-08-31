@@ -17,7 +17,7 @@ const Home = () => {
   
   useEffect(() => {
     dispatch(setDataBlog(counter));
-  }, [dispatch]);
+  }, [counter]);
 
 
   const previous = () => {
