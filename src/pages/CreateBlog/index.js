@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import {
   Form,
   Button,
@@ -7,11 +8,37 @@ import {
   Card,
   Image,
 } from "react-bootstrap";
-import { RegisterBg } from "../../assets";
-import { useHistory } from "react-router";
 
 const CreateBlog = () => {
-  const history = useHistory();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [image, setImage] = useState('');
+  const [imagePreview, setImagePreview] = useState(null);
+  const onSubmit = () =>{
+    console.log('title:', title)
+    console.log('content:', content)
+    console.log('image:', image)
+
+    const data = new FormData();
+    data.append('title', title)
+    data.append('content', content)
+    data.append('image', image)
+
+    axios.post('http://localhost:4000/v1/blog/post', data,{
+      headers:{
+        'content-type' : 'multipart/form-data'
+      }
+    }).then(res =>{
+      console.log('post success:', res)
+    }).catch(err =>{
+      console.log('err', err)
+    })
+  }
+  const onImageUpload = (e) =>{
+    const file = e.target.files[0];
+    setImage(file)
+    setImagePreview(URL.createObjectURL(file))
+  }
   return (
     <Container>
       <div className="d-flex justify-content-center flex-column">
@@ -20,12 +47,12 @@ const CreateBlog = () => {
             <Card.Title>Tambah Postingan</Card.Title>
             <Form>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Control type="text" placeholder="Post Title" />
+                <Form.Control type="text" placeholder="Post Title" value={title} onChange={(e) => setTitle(e.target.value)} />
               </Form.Group>
-              <Image src={RegisterBg} thumbnail width="200px" />
+              {imagePreview && <Image src={imagePreview} thumbnail width="200px" /> }
               <Form.Group controlId="formFile" className="mb-3">
                 <Form.Label>Upload Gambar</Form.Label>
-                <Form.Control type="file" />
+                <Form.Control type="file" onChange={(e) => onImageUpload(e) } />
               </Form.Group>
 
               <FloatingLabel controlId="floatingTextarea2" label="Isi Blog">
@@ -33,10 +60,12 @@ const CreateBlog = () => {
                   as="textarea"
                   placeholder="Leave a comment here"
                   style={{ height: "100px" }}
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
                 />
               </FloatingLabel>
               <div className="d-flex justify-content-end">
-                <Button variant="primary" type="submit" className="mt-5">
+                <Button variant="primary" className="mt-5" onClick={onSubmit}>
                   POSTING
                 </Button>
               </div>

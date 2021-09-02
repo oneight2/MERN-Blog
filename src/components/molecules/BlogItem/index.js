@@ -7,7 +7,7 @@ const BlogItem = (props) => {
   const { title, content, image, name, date } = props;
   return (
     <Col className="justify-content-md-center">
-      <Card style={{ width: "18rem" }} className="m-auto">
+      <Card  className="m-auto card-lg">
         <Card.Img variant="top" src={image} />
         <Card.Body>
           <Card.Title>{title}</Card.Title>

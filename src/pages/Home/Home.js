@@ -10,10 +10,11 @@ const Home = () => {
   // statelokal membuat pagination menghiung halaman diberi nilai default 1
   const [counter, setCounter] = useState(1);
   // inisialisasi state global dari redux
-  const { dataBlog } = useSelector((state) => state.homeReducer);
+  const { dataBlog, page } = useSelector((state) => state.homeReducer);
   const dispatch = useDispatch();
 
   console.log(counter);
+  console.log('page', page);
   
   useEffect(() => {
     dispatch(setDataBlog(counter));
@@ -21,12 +22,12 @@ const Home = () => {
 
 
   const previous = () => {
-    setCounter(counter - 1);
-    // console.log(counter);
+    // jika si counter kurang dari atau sama dengan 1 nilainya 1 kalo gak counter dikurang 1
+    setCounter(counter <= 1 ? 1 : counter - 1);
   };
   const next = () => {
-    setCounter(counter + 1);
-    // console.log(counter);
+    // jika si counter = totalpage tampilkan totalpage jika tidak counter + 1
+    setCounter(counter === page.totalPage ? page.totalPage : counter +1);
   };
 
   return (
@@ -62,7 +63,7 @@ const Home = () => {
           </div>
         </Col>
         <Col>
-          <p className="text-center">1 / 3</p>
+          <p className="text-center">{page.currentPage} / {page.totalPage}</p>
         </Col>
         <Col>
           <div className="d-flex justify-content-center">
