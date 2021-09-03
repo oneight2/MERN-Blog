@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setDataBlog } from "../../config/redux/action";
 
 const Home = () => {
+    
   const history = useHistory();
   // statelokal membuat pagination menghiung halaman diberi nilai default 1
   const [counter, setCounter] = useState(1);

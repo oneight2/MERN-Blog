@@ -1,5 +1,5 @@
-import axios from "axios";
-import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import React from "react";
 import {
   Form,
   Button,
@@ -8,36 +8,22 @@ import {
   Card,
   Image,
 } from "react-bootstrap";
+import { postToAPI, setForm, setImgPreview } from "../../config/redux/action";
+import { useHistory } from "react-router-dom";
 
 const CreateBlog = () => {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [image, setImage] = useState('');
-  const [imagePreview, setImagePreview] = useState(null);
+  const {form, imgPreview} = useSelector(state => state.createBlogReducer);
+  const {title, content} = form;
+  const dispatch = useDispatch()
+  const history = useHistory()
+
   const onSubmit = () =>{
-    console.log('title:', title)
-    console.log('content:', content)
-    console.log('image:', image)
-
-    const data = new FormData();
-    data.append('title', title)
-    data.append('content', content)
-    data.append('image', image)
-
-    axios.post('http://localhost:4000/v1/blog/post', data,{
-      headers:{
-        'content-type' : 'multipart/form-data'
-      }
-    }).then(res =>{
-      console.log('post success:', res)
-    }).catch(err =>{
-      console.log('err', err)
-    })
+    postToAPI(form)
   }
   const onImageUpload = (e) =>{
     const file = e.target.files[0];
-    setImage(file)
-    setImagePreview(URL.createObjectURL(file))
+    dispatch(setForm('image', file))
+    dispatch(setImgPreview(URL.createObjectURL(file)))
   }
   return (
     <Container>
@@ -47,9 +33,9 @@ const CreateBlog = () => {
             <Card.Title>Tambah Postingan</Card.Title>
             <Form>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Control type="text" placeholder="Post Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <Form.Control type="text" placeholder="Post Title" value={title} onChange={(e) =>setForm('title', e.target.value)} />
               </Form.Group>
-              {imagePreview && <Image src={imagePreview} thumbnail width="200px" /> }
+              {imgPreview && <Image src={imgPreview} thumbnail width="200px" /> }
               <Form.Group controlId="formFile" className="mb-3">
                 <Form.Label>Upload Gambar</Form.Label>
                 <Form.Control type="file" onChange={(e) => onImageUpload(e) } />
@@ -61,7 +47,7 @@ const CreateBlog = () => {
                   placeholder="Leave a comment here"
                   style={{ height: "100px" }}
                   value={content}
-                  onChange={(e) => setContent(e.target.value)}
+                  onChange={(e) => dispatch(setForm('content', e.target.value))}
                 />
               </FloatingLabel>
               <div className="d-flex justify-content-end">
